@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Rumus Excel Interaktif</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Game Rumus Excel Interaktif</h1>
+      <div id="level-indicator">
+        Nomor Soal: <span id="current-level">1</span>
+      </div>
+
+      <div class="data-display">
+        <h2>Data Penjualan (Simulasi Excel Sheet1)</h2>
+        <table id="excel-data-table">
+          <thead>
+            <tr>
+              <th>Sel</th>
+              <th>A</th>
+              <th>B</th>
+              <th>C</th>
+              <th>D</th>
+              <th>E</th>
+              <th>F</th>
+              <th>G</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>No.</td>
+              <td>Nama Produk</td>
+              <td>Kategori</td>
+              <td>Harga Satuan</td>
+              <td>Jumlah Terjual</td>
+              <td>Diskon (%)</td>
+              <td>Tanggal Penjualan</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>1</td>
+              <td>Laptop XYZ</td>
+              <td>Elektronik</td>
+              <td>12500000</td>
+              <td>3</td>
+              <td>0.05</td>
+              <td>2025-01-15</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>2</td>
+              <td>Keyboard Mech</td>
+              <td>Aksesoris</td>
+              <td>850000</td>
+              <td>5</td>
+              <td>0</td>
+              <td>2025-01-18</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>3</td>
+              <td>Mouse Gaming</td>
+              <td>Aksesoris</td>
+              <td>400000</td>
+              <td>8</td>
+              <td>0.1</td>
+              <td>2025-01-18</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>4</td>
+              <td>Monitor LED</td>
+              <td>Elektronik</td>
+              <td>3200000</td>
+              <td>2</td>
+              <td>0</td>
+              <td>2025-01-20</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>5</td>
+              <td>Headset Nirkabel</td>
+              <td>Aksesoris</td>
+              <td>1500000</td>
+              <td>4</td>
+              <td>0.05</td>
+              <td>2025-01-22</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>6</td>
+              <td>Printer Laser</td>
+              <td>Elektronik</td>
+              <td>4800000</td>
+              <td>1</td>
+              <td>0</td>
+              <td>2025-01-25</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>7</td>
+              <td>SSD 1TB</td>
+              <td>Komponen</td>
+              <td>1200000</td>
+              <td>6</td>
+              <td>0.15</td>
+              <td>2025-01-28</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>8</td>
+              <td>RAM 16GB</td>
+              <td>Komponen</td>
+              <td>900000</td>
+              <td>7</td>
+              <td>0.1</td>
+              <td>2025-01-28</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          <em
+            >*Anggap sel D, E, F, G adalah kolom Harga Satuan, Jumlah Terjual,
+            Diskon (%), dan Tanggal Penjualan.</em
+          >
+        </p>
+      </div>
+
+      <div class="question-area">
+        <h3 id="question-text"></h3>
+
+        <p>
+          Berapa **hasil angka** dari soal di atas setelah Anda hitung di Excel?
+          <br />
+          <small
+            ><em
+              >(Isi hanya angka atau teks, tanpa tanda mata uang/persen, misal:
+              1000000 atau Ada Diskon)</em
+            ></small
+          >
+        </p>
+        <input
+          type="text"
+          id="user-result-input"
+          placeholder="Masukkan hasil dari rumus Anda"
+        />
+
+        <button id="check-answer-btn">Cek Jawaban</button>
+        <div id="feedback" class="feedback"></div>
+        <button id="next-question-btn" style="display: none">
+          Soal Selanjutnya &raquo;
+        </button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
