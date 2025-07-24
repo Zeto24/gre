@@ -1,9 +1,7 @@
 // script.js
 
 // --- DATA SIMULASI EXCEL ---
-// Ini adalah data yang akan menjadi referensi untuk perhitungan expectedResult
-// Kolom dimulai dari indeks 0 (A=0, B=1, dst.)
-// Baris dimulai dari indeks 0 (header), jadi data dimulai dari indeks 1.
+// ... (tidak ada perubahan di bagian ini) ...
 const excelData = [
   // A        B           C           D           E           F           G
   [
@@ -25,7 +23,6 @@ const excelData = [
   [8, "RAM 16GB", "Komponen", 900000, 7, 0.1, "2025-01-28"], // Baris 9
 ];
 
-// Data untuk Sheet2
 const sheet2Data = [
   ["Kode Kategori", "Deskripsi Kategori"],
   ["EL", "Elektronik"],
@@ -34,10 +31,7 @@ const sheet2Data = [
 ];
 
 // --- FUNGSI SIMULASI EXCEL UNTUK MENGHITUNG EXPECTED RESULT ---
-// Fungsi ini akan digunakan untuk menghitung nilai expectedResult secara dinamis jika perlu
-// dan juga untuk "mengerti" bagaimana Excel bekerja pada data simulasi kita.
-
-// Helper untuk mendapatkan nilai dari sel
+// ... (tidak ada perubahan di bagian ini) ...
 function getVal(rowIdx, colIdx) {
   if (excelData[rowIdx] && excelData[rowIdx][colIdx] !== undefined) {
     return excelData[rowIdx][colIdx];
@@ -45,7 +39,6 @@ function getVal(rowIdx, colIdx) {
   return undefined;
 }
 
-// Helper untuk mendapatkan nilai dari rentang (khusus untuk fungsi agregasi)
 function getRangeVals(startRef, endRef, dataSrc = excelData) {
   const startCol = startRef.charCodeAt(0) - "A".charCodeAt(0);
   const startRow = parseInt(startRef.substring(1), 10) - 1;
@@ -60,7 +53,6 @@ function getRangeVals(startRef, endRef, dataSrc = excelData) {
         dataSrc[r][c] !== undefined &&
         (typeof dataSrc[r][c] === "number" || typeof dataSrc[r][c] === "string")
       ) {
-        // Hanya masukkan angka atau string tidak kosong
         values.push(dataSrc[r][c]);
       }
     }
@@ -68,7 +60,6 @@ function getRangeVals(startRef, endRef, dataSrc = excelData) {
   return values;
 }
 
-// Implementasi fungsi Excel yang sebenarnya
 const calculateExcelFunction = {
   SUM: (range) => {
     const numbers = getRangeVals(
@@ -93,7 +84,7 @@ const calculateExcelFunction = {
       range.split(":")[0],
       range.split(":")[1]
     ).filter((val) => typeof val === "number");
-    if (numbers.length === 0) return 0; // Atau -Infinity
+    if (numbers.length === 0) return 0;
     return Math.max(...numbers);
   },
   MIN: (range) => {
@@ -101,12 +92,10 @@ const calculateExcelFunction = {
       range.split(":")[0],
       range.split(":")[1]
     ).filter((val) => typeof val === "number");
-    if (numbers.length === 0) return 0; // Atau Infinity
+    if (numbers.length === 0) return 0;
     return Math.min(...numbers);
   },
   IF: (condition, valueIfTrue, valueIfFalse) => {
-    // Untuk IF, kita akan menganggap kondisi sudah dievaluasi.
-    // Dalam soal, kita akan menyediakan kondisi yang sudah "siap".
     return condition ? valueIfTrue : valueIfFalse;
   },
   VLOOKUP: (
@@ -115,71 +104,57 @@ const calculateExcelFunction = {
     col_index_num,
     range_lookup = false
   ) => {
-    // table_array_ref: contoh 'Sheet2!$A$1:$B$4'
-    const tableParts = table_array_ref.split("!")[1].split(":");
-    const tableStartRef = tableParts[0].replace(/\$/g, ""); // Hapus $
-    const tableEndRef = tableParts[1].replace(/\$/g, ""); // Hapus $
-
-    const tableData = getRangeVals(tableStartRef, tableEndRef, sheet2Data); // Gunakan sheet2Data
-    const lookupColIdx = tableStartRef.charCodeAt(0) - "A".charCodeAt(0);
-    const returnColIdx =
-      tableStartRef.charCodeAt(0) - "A".charCodeAt(0) + (col_index_num - 1);
-
-    for (let i = 0; i < sheet2Data.length; i++) {
-      // Iterasi semua baris di sheet2Data
-      // Cari lookup_value di kolom pertama dari table_array
-      if (sheet2Data[i][lookupColIdx] === lookup_value) {
-        return sheet2Data[i][returnColIdx];
+    for (let i = 1; i < sheet2Data.length; i++) {
+      if (sheet2Data[i][1] === lookup_value) {
+        return sheet2Data[i][0];
       }
     }
-    return "#N/A"; // Jika tidak ditemukan
+    return "#N/A";
   },
   CONCAT: (val1, val2, val3) => {
-    // Contoh untuk 3 argumen, bisa diperluas
     return `${val1}${val2}${val3}`;
   },
   MONTH: (dateString) => {
     const date = new Date(dateString);
-    return date.getMonth() + 1; // getMonth() is 0-indexed
+    return date.getMonth() + 1;
   },
   TODAY: () => {
     const today = new Date();
-    // Hanya tanggal, tanpa waktu untuk konsistensi dengan Excel
     return new Date(today.getFullYear(), today.getMonth(), today.getDate());
   },
   DATEDIF: (startDateObj, endDateObj, unit) => {
     const diffTime = Math.abs(endDateObj.getTime() - startDateObj.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (unit.toUpperCase() === "D") return diffDays;
-    return diffDays; // Untuk kesederhanaan, hanya implementasi hari
+    return diffDays;
+  },
+  DATE_PARSE: (dateString) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
   },
 };
 
-// --- DATA SOAL PER LEVEL ---
-// expectedResult sekarang dihitung secara dinamis atau hardcoded jika kompleks
+// --- DATA SOAL PER NOMOR ---
+// ... (tidak ada perubahan di bagian ini, sudah benar) ...
 const questions = [
-  // Level 1: Dasar Matematika & Statistik Sederhana
   {
-    level: 1, // 'level' ini bisa dihapus atau diabaikan sekarang
-    question:
-      "Berapa **Total Harga (Sebelum Diskon)** untuk 'Laptop XYZ'? (Rumus di sel H2: D2*E2)",
+    question: "Berapa **Total Harga (Sebelum Diskon)** untuk 'Laptop XYZ'?",
+    formulaExample: "H2: =D2*E2",
     resultCell: "H2",
-    expectedResult: () => getVal(1, 3) * getVal(1, 4), // D2 * E2
+    expectedResult: () => getVal(1, 3) * getVal(1, 4),
     type: "number",
   },
   {
-    level: 1,
-    question:
-      "Berapa **Total Harga (Setelah Diskon)** untuk 'Laptop XYZ'? (Rumus di sel I2: H2-(H2*F2))",
+    question: "Berapa **Total Harga (Setelah Diskon)** untuk 'Laptop XYZ'?",
+    formulaExample: "I2: =H2-(H2*F2)",
     resultCell: "I2",
     expectedResult: () =>
-      getVal(1, 3) * getVal(1, 4) - getVal(1, 3) * getVal(1, 4) * getVal(1, 5), // (D2*E2) - ((D2*E2)*F2)
+      getVal(1, 3) * getVal(1, 4) - getVal(1, 3) * getVal(1, 4) * getVal(1, 5),
     type: "number",
   },
   {
-    level: 1,
-    question:
-      "Berapa **total penjualan semua produk sebelum diskon**? (Rumus di sel H10: SUM(H2:H9))",
+    question: "Berapa **total penjualan semua produk sebelum diskon**?",
+    formulaExample: "H10: =SUM(H2:H9)",
     resultCell: "H10",
     expectedResult: () =>
       getVal(1, 3) * getVal(1, 4) +
@@ -193,41 +168,36 @@ const questions = [
     type: "number",
   },
   {
-    level: 1,
-    question:
-      "Berapa **rata-rata 'Harga Satuan'** dari semua produk? (Rumus di sel D10: AVERAGE(D2:D9))",
+    question: "Berapa **rata-rata 'Harga Satuan'** dari semua produk?",
+    formulaExample: "D10: =AVERAGE(D2:D9)",
     resultCell: "D10",
     expectedResult: () => calculateExcelFunction.AVERAGE("D2:D9"),
     type: "number",
   },
-  // Level 2: Logika & Teks (Sekarang jadi Nomor Soal berurutan)
   {
-    level: 2, // Ini juga bisa diabaikan
-    question:
-      "Apa **'Status Diskon'** untuk 'Laptop XYZ'? (Rumus di sel J2: IF(F2>0,\"Ada Diskon\",\"Tidak Ada Diskon\"))",
+    question: "Apa **'Status Diskon'** untuk 'Laptop XYZ'?",
+    formulaExample: 'J2: =JIKA(F2>0;"Ada Diskon";"Tidak Ada Diskon")',
     resultCell: "J2",
     expectedResult: () =>
       calculateExcelFunction.IF(
         getVal(1, 5) > 0,
         "Ada Diskon",
         "Tidak Ada Diskon"
-      ), // F2 > 0
+      ),
     type: "string",
   },
   {
-    level: 2,
-    question:
-      "Apa **'ID Produk'** untuk 'Laptop XYZ'? (Rumus di sel M2: C2&\"-\"&A2)",
+    question: "Apa **'ID Produk'** untuk 'Laptop XYZ'?",
+    formulaExample: 'M2: =C2&"-"&A2',
     resultCell: "M2",
     expectedResult: () =>
-      calculateExcelFunction.CONCAT(getVal(1, 2), "-", getVal(1, 0)), // C2 & "-" & A2
+      calculateExcelFunction.CONCAT(getVal(1, 2), "-", getVal(1, 0)),
     type: "string",
   },
-  // Level 3: Pencarian & Tanggal (Sekarang jadi Nomor Soal berurutan)
   {
-    level: 3,
     question:
-      "Apa **'Kode Kategori'** untuk produk 'Laptop XYZ' jika dicari dari Sheet2? (Rumus di sel L2: VLOOKUP(C2,Sheet2!$A$1:$B$4,1,FALSE))",
+      "Apa **'Kode Kategori'** untuk produk 'Laptop XYZ' jika dicari dari Sheet2?",
+    formulaExample: "L2: =INDEX(Sheet2!$A:$A;MATCH(C2;Sheet2!$B:$B;0))",
     resultCell: "L2",
     expectedResult: () =>
       calculateExcelFunction.VLOOKUP(
@@ -235,24 +205,23 @@ const questions = [
         "Sheet2!$A$1:$B$4",
         1,
         false
-      ), // C2
+      ),
     type: "string",
   },
   {
-    level: 3,
-    question:
-      "Berapa **bulan penjualan** untuk 'Laptop XYZ'? (Rumus di sel N2: MONTH(G2))",
+    question: "Berapa **bulan penjualan** untuk 'Laptop XYZ'?",
+    formulaExample: "N2: =MONTH(G2)",
     resultCell: "N2",
-    expectedResult: () => calculateExcelFunction.MONTH(getVal(1, 6)), // G2
+    expectedResult: () => calculateExcelFunction.MONTH(getVal(1, 6)),
     type: "number",
   },
   {
-    level: 3,
     question:
-      "Berapa **'Usia Data (Hari)'** untuk 'Laptop XYZ' hingga hari ini? (Rumus di sel O2: TODAY()-G2)",
+      "Berapa **'Usia Data (Hari)'** untuk 'Laptop XYZ' hingga hari ini?",
+    formulaExample: "O2: =TODAY()-G2",
     resultCell: "O2",
     expectedResult: () => {
-      const startDate = calculateExcelFunction.DATE_PARSE(getVal(1, 6)); // Tanggal penjualan Laptop XYZ (G2)
+      const startDate = calculateExcelFunction.DATE_PARSE(getVal(1, 6));
       const today = calculateExcelFunction.TODAY();
       return calculateExcelFunction.DATEDIF(startDate, today, "D");
     },
@@ -266,23 +235,27 @@ const questionTextElement = document.getElementById("question-text");
 const userResultInput = document.getElementById("user-result-input");
 const checkBtn = document.getElementById("check-answer-btn");
 const nextBtn = document.getElementById("next-question-btn");
-const currentLevelSpan = document.getElementById("current-level"); // ID ini tetap bisa dipakai, kita hanya ganti teksnya.
+const currentLevelSpan = document.getElementById("current-level");
 
 // --- FUNGSI UTAMA GAME ---
 
 function loadQuestion() {
   if (currentQuestionIndex < questions.length) {
     const q = questions[currentQuestionIndex];
-    // Mengubah "Level ${q.level}:" menjadi "Soal ${currentQuestionIndex + 1}:"
-    questionTextElement.innerHTML = `**Soal ${currentQuestionIndex + 1}:** ${
-      q.question
-    }`;
+    // Pastikan formulaExample ada sebelum mencoba menampilkannya
+    let formulaHtml = "";
+    if (q.formulaExample) {
+      formulaHtml = `<br><small><em>(Rumus di sel ${q.formulaExample})</em></small>`;
+    }
+
+    questionTextElement.innerHTML = `
+          **Soal ${currentQuestionIndex + 1}:** ${q.question} ${formulaHtml}
+      `;
     userResultInput.value = "";
     feedbackElement.textContent = "";
     feedbackElement.className = "feedback";
     nextBtn.style.display = "none";
     checkBtn.style.display = "inline-block";
-    // Mengubah "Level: X" menjadi "Nomor Soal: X"
     currentLevelSpan.textContent = currentQuestionIndex + 1;
   } else {
     questionTextElement.textContent =
@@ -308,39 +281,42 @@ function checkAnswer() {
 
   let actualExpectedResult = currentQuestion.expectedResult();
 
-  // Normalisasi input dan expectedResult berdasarkan tipe data
   let isCorrect = false;
   if (currentQuestion.type === "number") {
     const parsedUserInput = parseFloat(
       userInputResult.replace(/\./g, "").replace(/,/g, ".")
     );
     if (!isNaN(parsedUserInput)) {
-      // Bandingkan angka dengan toleransi kecil untuk floating point
       isCorrect = Math.abs(parsedUserInput - actualExpectedResult) < 0.01;
     }
   } else if (currentQuestion.type === "string") {
     isCorrect =
       userInputResult.toLowerCase() === actualExpectedResult.toLowerCase();
   } else {
-    // Fallback untuk tipe lain jika ada
     isCorrect = userInputResult == actualExpectedResult;
   }
 
   if (isCorrect) {
     feedbackElement.className = "feedback correct";
-    feedbackElement.textContent = "Benar! Hasil Anda tepat.";
+    // Pastikan formulaExample ada sebelum mencoba mengambil bagiannya
+    let displayedFormula = currentQuestion.formulaExample
+      ? currentQuestion.formulaExample.split(": ")[1]
+      : "Tidak ada contoh rumus";
+    feedbackElement.innerHTML = `Benar! Hasil Anda tepat.`;
     nextBtn.style.display = "inline-block";
     checkBtn.style.display = "none";
   } else {
     feedbackElement.className = "feedback incorrect";
-    // Tampilkan juga jawaban yang benar untuk pembelajaran
+    let displayedFormula = currentQuestion.formulaExample
+      ? currentQuestion.formulaExample.split(": ")[1]
+      : "Tidak ada contoh rumus";
     feedbackElement.innerHTML = `
           Salah. Hasil Anda <code>${userInputResult}</code> tidak sesuai harapan. <br>
           Hasil yang benar adalah <code>${
             typeof actualExpectedResult === "number"
               ? actualExpectedResult.toLocaleString("id-ID")
               : actualExpectedResult
-          }</code>. Coba lagi!
+          }</code>.Coba lagi!
       `;
   }
 }
