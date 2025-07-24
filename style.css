@@ -1,96 +1,115 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #e0f2f7;
+  background-color: #f4f7f6;
+  color: #333;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align to top */
+  align-items: flex-start; /* Align items to the top */
   min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .game-container {
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 900px;
-  box-sizing: border-box;
+  max-width: 900px; /* Lebarkan sedikit container */
+  text-align: center;
+  margin-top: 20px;
 }
 
 h1 {
-  color: #007bff;
-  text-align: center;
-  margin-bottom: 25px;
+  color: #0056b3;
+  margin-bottom: 20px;
+  font-size: 2em;
 }
 
 #level-indicator {
-  text-align: right;
+  background-color: #e0f2f7;
+  color: #0056b3;
+  padding: 8px 15px;
+  border-radius: 20px;
   font-weight: bold;
-  color: #555;
-  margin-bottom: 15px;
-}
-
-.data-display h2 {
-  color: #333;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-#excel-data-table {
-  width: 100%;
-  border-collapse: collapse;
+  display: inline-block;
   margin-bottom: 20px;
   font-size: 0.9em;
 }
 
-#excel-data-table th,
-#excel-data-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.data-display {
+  background-color: #e9f5f9;
+  border: 1px solid #cce7ee;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
-#excel-data-table thead th {
+.data-display h2 {
+  color: #004085;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.3em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #ffffff;
+}
+
+table th,
+table td {
+  border: 1px solid #a8d9ec;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+table thead th {
   background-color: #007bff;
   color: white;
-  font-weight: normal;
-}
-
-#excel-data-table tbody tr:nth-child(even) {
-  background-color: #f8f8f8;
-}
-
-#excel-data-table tbody td:first-child {
-  /* Row numbers */
-  background-color: #f0f0f0;
   font-weight: bold;
-  text-align: center;
 }
-#excel-data-table thead th:first-child {
-  /* "Sel" header */
-  background-color: #f0f0f0;
-  color: #333;
+
+table tbody tr:nth-child(even) {
+  background-color: #f2f9fd;
+}
+
+table tbody td:first-child {
+  background-color: #e0f2f7;
+  font-weight: bold;
+  color: #0056b3;
 }
 
 .note {
   font-size: 0.85em;
-  color: #666;
-  margin-top: -10px;
-  margin-bottom: 20px;
-  font-style: italic;
+  color: #555;
+  margin-top: 10px;
+}
+
+.question-area {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
 }
 
 .question-area h3 {
-  color: #0056b3;
-  margin-bottom: 10px;
+  color: #212529;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.1em;
 }
 
-#user-formula-input {
-  width: calc(100% - 100px); /* Adjust for button width */
+#user-result-input {
+  width: calc(100% - 22px);
   padding: 10px;
-  margin-right: 10px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1em;
@@ -107,6 +126,7 @@ h1 {
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
+  margin-bottom: 5px; /* Tambahkan sedikit margin bawah */
 }
 
 #check-answer-btn:hover,
@@ -116,7 +136,7 @@ h1 {
 
 #next-question-btn {
   background-color: #007bff;
-  margin-top: 15px;
+  margin-top: 0; /* Sesuaikan margin top */
   float: right;
 }
 #next-question-btn:hover {
@@ -128,67 +148,7 @@ h1 {
   padding: 10px;
   border-radius: 5px;
   font-weight: bold;
-}
-
-.feedback.correct {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.feedback.incorrect {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* ... (kode CSS sebelumnya) ... */
-
-/* Hapus atau komentari aturan ini jika #user-formula-input sudah dihapus */
-/*
-#user-formula-input,
-*/
-#user-result-input {
-  width: calc(100% - 22px); /* Penyesuaian lebar */
-  padding: 10px;
-  margin-bottom: 15px; /* Spasi antar input */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
-  box-sizing: border-box;
-}
-
-#check-answer-btn,
-#next-question-btn {
-  padding: 10px 20px;
-  background-color: #28a745; /* Warna hijau untuk cek jawaban */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
-}
-
-#check-answer-btn:hover,
-#next-question-btn:hover {
-  background-color: #218838;
-}
-
-#next-question-btn {
-  background-color: #007bff;
-  margin-top: 15px;
-  float: right;
-}
-#next-question-btn:hover {
-  background-color: #0056b3;
-}
-
-.feedback {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
+  clear: both; /* Penting untuk membersihkan float dari tombol */
 }
 
 .feedback.correct {
@@ -211,4 +171,8 @@ code {
   color: #c7254e;
 }
 
-/* ... (sisa kode CSS) ... */
+/* Gaya khusus untuk tabel Sheet2 */
+#excel-data-table-sheet2 th,
+#excel-data-table-sheet2 td {
+  font-size: 0.9em; /* Ukuran font bisa disesuaikan */
+}
